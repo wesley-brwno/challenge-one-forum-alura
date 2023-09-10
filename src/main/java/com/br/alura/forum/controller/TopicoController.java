@@ -69,4 +69,12 @@ public class TopicoController {
         Page<TopicoDetalhes> topicos = topicoRepository.findByAno(pageable, ano).map(TopicoDetalhes::new);
         return ResponseEntity.ok().body(topicos);
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<TopicoDetalhes> atualizarTopico(@Valid @RequestBody CadastrarTopicoDados dados, @PathVariable Long id) {
+        if (!topicoRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.accepted().body(cadastrarTopico.atualizarTopico(dados, id));
+    }
 }
