@@ -15,4 +15,5 @@ public interface TopicoRepository extends JpaRepository<Topico, Long> {
     Page<Topico> findByAno(Pageable pageable, Long ano);
     long countByTitulo(String titulo);
     long countByMensagem(String mensagem);
+    Topico findByTituloAndMensagem(String titulo, String mensagem);
 }
