@@ -38,5 +38,10 @@ public class Topico {
 		this.autor = usuario;
 		this.curso = curso;
 	}
+
+	public Topico(Long id, CadastrarTopicoDados dados, Usuario usuario, Curso curso) {
+		this(dados, usuario, curso);
+		this.id = id;
+	}
 }
 

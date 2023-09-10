@@ -29,14 +29,24 @@ public class CadastrarTopico {
 
     @Transactional
     public TopicoDetalhes criarNovoTopio(CadastrarTopicoDados dados) {
-
         validacoes.forEach(v -> v.validar(dados));
 
         Usuario usuario = usuarioRespository.findById(dados.autorId()).get();
         Curso curso = cursoRepository.findById(dados.cursoId()).get();
 
         Topico topico = new Topico(dados, usuario, curso);
+        topicoRepository.save(topico);
 
+        return new TopicoDetalhes(topico.getId(), topico.getTitulo(), topico.getMensagem(), topico.getDataCriacao(), topico.getStatus(), topico.getAutor().getNome(), topico.getCurso().getNome());
+    }
+
+    public TopicoDetalhes atualizarTopico(CadastrarTopicoDados dados, Long id) {
+        validacoes.forEach(v -> v.validar(dados));
+
+        Usuario usuario = usuarioRespository.findById(dados.autorId()).get();
+        Curso curso = cursoRepository.findById(dados.cursoId()).get();
+
+        Topico topico = new Topico(id, dados, usuario, curso);
         topicoRepository.save(topico);
 
         return new TopicoDetalhes(topico.getId(), topico.getTitulo(), topico.getMensagem(), topico.getDataCriacao(), topico.getStatus(), topico.getAutor().getNome(), topico.getCurso().getNome());
