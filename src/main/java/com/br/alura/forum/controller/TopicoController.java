@@ -2,6 +2,7 @@ package com.br.alura.forum.controller;
 
 import com.br.alura.forum.DTO.topico.CadastrarTopicoDados;
 import com.br.alura.forum.DTO.topico.TopicoDetalhes;
+import com.br.alura.forum.modelo.Topico;
 import com.br.alura.forum.repository.CursoRepository;
 import com.br.alura.forum.repository.TopicoRepository;
 import com.br.alura.forum.service.topico.CadastrarTopico;
@@ -12,12 +13,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/topicos")
@@ -76,5 +79,16 @@ public class TopicoController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.accepted().body(cadastrarTopico.atualizarTopico(dados, id));
+    }
+
+    @DeleteMapping("{id}")
+    @Transactional
+    public ResponseEntity<Void> deletarTopico(@PathVariable Long id) {
+        Optional<Topico> topico = topicoRepository.findById(id);
+        if (topico.isPresent()) {
+            topicoRepository.delete(topico.get());
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
