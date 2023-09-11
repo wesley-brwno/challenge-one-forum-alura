@@ -40,6 +40,7 @@ public class CadastrarTopico {
         return new TopicoDetalhes(topico.getId(), topico.getTitulo(), topico.getMensagem(), topico.getDataCriacao(), topico.getStatus(), topico.getAutor().getNome(), topico.getCurso().getNome());
     }
 
+    @Transactional
     public TopicoDetalhes atualizarTopico(CadastrarTopicoDados dados, Long id) {
         validacoes.forEach(v -> v.validar(dados));
 
