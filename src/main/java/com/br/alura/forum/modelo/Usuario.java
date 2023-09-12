@@ -1,5 +1,7 @@
 package com.br.alura.forum.modelo;
 
+import com.br.alura.forum.DTO.usuario.UsuarioDataInput;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.persistence.*;
 
 @Entity(name = "Usuario")
@@ -12,6 +14,21 @@ public class Usuario {
 	private String nome;
 	private String email;
 	private String senha;
+
+	public Usuario(UsuarioDataInput dataInput) {
+		this.nome = dataInput.nome();
+		this.email = dataInput.email();
+		this.senha = dataInput.senha();
+	}
+
+	public Usuario(Long id, UsuarioDataInput dataInput) {
+		this(dataInput);
+		this.id = id;
+	}
+
+	public Usuario() {
+
+	}
 
 	@Override
 	public int hashCode() {
