@@ -1,9 +1,12 @@
 package com.br.alura.forum.modelo;
 
+import com.br.alura.forum.DTO.curso.CursoDataInput;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 
 @Entity(name = "Curso")
 @Table(name = "cursos")
+@AllArgsConstructor
 public class Curso {
 
 	@Id
@@ -17,8 +20,11 @@ public class Curso {
 		this.categoria = categoria;
 	}
 
+	public Curso(CursoDataInput dataInput) {
+		this.nome = dataInput.nome();
+		this.categoria = dataInput.categoria();
+	}
 	public Curso() {
-
 	}
 
 	@Override
