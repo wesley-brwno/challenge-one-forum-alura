@@ -1,11 +1,15 @@
 package com.br.alura.forum.modelo;
 
+import com.br.alura.forum.DTO.resposta.RespostaDataInput;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "respostas")
+@NoArgsConstructor
 public class Resposta {
 
 	@Id
@@ -15,11 +19,18 @@ public class Resposta {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "topico_id")
 	private Topico topico;
+	@JsonAlias("data_criacao")
 	private LocalDateTime dataCriacao = LocalDateTime.now();
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
 	private Usuario autor;
 	private Boolean solucao = false;
+
+	public Resposta(RespostaDataInput dataInput, Usuario usuario, Topico topico) {
+		this.mensagem = dataInput.mensagem();
+		this.autor = usuario;
+		this.topico = topico;
+	}
 
 	@Override
 	public int hashCode() {
