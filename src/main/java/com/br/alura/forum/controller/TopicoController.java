@@ -1,18 +1,26 @@
 package com.br.alura.forum.controller;
 
+import com.br.alura.forum.DTO.autenticacao.ErrorResponse;
 import com.br.alura.forum.DTO.topico.CadastrarTopicoDados;
 import com.br.alura.forum.DTO.topico.TopicoDetalhes;
+import com.br.alura.forum.modelo.Curso;
 import com.br.alura.forum.modelo.Topico;
+import com.br.alura.forum.modelo.Usuario;
 import com.br.alura.forum.repository.CursoRepository;
 import com.br.alura.forum.repository.TopicoRepository;
-import com.br.alura.forum.service.topico.CadastrarTopico;
+import com.br.alura.forum.repository.UsuarioRespository;
+import com.br.alura.forum.service.topico.ValidarTopico;
+import com.br.alura.forum.service.usuario.UsuarioPermissao;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -26,17 +34,26 @@ import java.util.Optional;
 @RequestMapping("/topicos")
 public class TopicoController {
     @Autowired
-    private CadastrarTopico cadastrarTopico;
+    private ValidarTopico validarTopico;
+    @Autowired
+    private UsuarioPermissao usuarioPermissao;
     @Autowired
     private TopicoRepository topicoRepository;
     @Autowired
     private CursoRepository cursoRepository;
+    @Autowired
+    private UsuarioRespository usuarioRespository;
 
     @PostMapping
+    @Transactional
     public ResponseEntity<TopicoDetalhes> cadastrar(@Valid @RequestBody CadastrarTopicoDados dados, UriComponentsBuilder uriBuilder) {
-        TopicoDetalhes topicoDetalhes = cadastrarTopico.criarNovoTopio(dados);
-        URI uri = uriBuilder.path("/topico/{id}").buildAndExpand(topicoDetalhes.id()).toUri();
-        return ResponseEntity.created(uri).body(topicoDetalhes);
+        validarTopico.aplicarValidacoes(dados);
+        Usuario usuario = usuarioRespository.findById(dados.autorId()).get();
+        Curso curso = cursoRepository.findById(dados.cursoId()).get();
+        Topico topico = new Topico(dados, usuario, curso);
+        topicoRepository.save(topico);
+        URI uri = uriBuilder.path("/topico/{id}").buildAndExpand(topico.getId()).toUri();
+        return ResponseEntity.created(uri).body(new TopicoDetalhes(topico));
     }
 
     @GetMapping
@@ -74,20 +91,38 @@ public class TopicoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<TopicoDetalhes> atualizarTopico(@Valid @RequestBody CadastrarTopicoDados dados, @PathVariable Long id) {
-        if (!topicoRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
+    @Transactional
+    public ResponseEntity<?> atualizarTopico(@Valid @RequestBody CadastrarTopicoDados dados, @PathVariable Long id, Authentication authentication) {
+        Optional<Topico> topico = topicoRepository.findById(id);
+
+        if (topico.isPresent()) {
+            if (usuarioPermissao.isCriadorDoTopico(authentication, topico.get().getAutor().getEmail())) {
+                validarTopico.aplicarValidacoes(dados);
+                Usuario usuario = usuarioRespository.findById(dados.autorId()).get();
+                Curso curso = cursoRepository.findById(dados.cursoId()).get();
+                topico.get().setTitulo(dados.titulo());
+                topico.get().setMensagem(dados.mensagem());
+                topico.get().setAutor(usuario);
+                topico.get().setCurso(curso);
+                topicoRepository.save(topico.get());
+                return ResponseEntity.ok().body(new TopicoDetalhes(topico.get()));
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("O topico de id "+id+" não pertence a esse usuário!"));
         }
-        return ResponseEntity.accepted().body(cadastrarTopico.atualizarTopico(dados, id));
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("{id}")
     @Transactional
-    public ResponseEntity<Void> deletarTopico(@PathVariable Long id) {
+    @Modifying
+    public ResponseEntity<?> deletarTopico(@PathVariable Long id, Authentication authentication) {
         Optional<Topico> topico = topicoRepository.findById(id);
         if (topico.isPresent()) {
-            topicoRepository.delete(topico.get());
-            return ResponseEntity.noContent().build();
+            if (usuarioPermissao.isAdmin(authentication) || usuarioPermissao.isCriadorDoTopico(authentication, topico.get().getAutor().getEmail())) {
+                topicoRepository.delete(topico.get());
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("Usuário não é o criador desse tópico!"));
         }
         return ResponseEntity.notFound().build();
     }

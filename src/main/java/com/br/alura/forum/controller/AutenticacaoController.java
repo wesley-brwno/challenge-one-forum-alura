@@ -1,6 +1,6 @@
 package com.br.alura.forum.controller;
 
-import com.br.alura.forum.DTO.autenticacao.ErrorConflict;
+import com.br.alura.forum.DTO.autenticacao.ErrorResponse;
 import com.br.alura.forum.DTO.autenticacao.TokenDTO;
 import com.br.alura.forum.DTO.usuario.UsuarioDataInput;
 import com.br.alura.forum.DTO.usuario.UsuarioDataOutput;
@@ -40,7 +40,7 @@ public class AutenticacaoController {
     @Transactional
     public ResponseEntity<?> regisrar(@Valid @RequestBody UsuarioDataInput data, UriComponentsBuilder uriComponentsBuilder) {
         if (usuarioRespository.findByEmail(data.email()) != null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorConflict("Email já está em uso!"));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("Email já está em uso!"));
         }
         String encode = new BCryptPasswordEncoder().encode(data.senha());
         Usuario usuario = new Usuario(data.nome(), data.email(), encode);

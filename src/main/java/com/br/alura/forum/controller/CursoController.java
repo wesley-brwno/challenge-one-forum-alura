@@ -26,9 +26,7 @@ public class CursoController {
     @Transactional
     public ResponseEntity<CursoDataOutput> cadastrar(@Valid @RequestBody CursoDataInput dataInput, UriComponentsBuilder uriBuilder) {
         Curso curso = new Curso(dataInput);
-        System.err.println("Dados inseridos: " +dataInput);
         cursoRepository.save(curso);
-        System.err.println(curso.getNome()+" "+curso.getCategoria());
         URI uri = uriBuilder.path("/curso/{id}").buildAndExpand(curso.getId()).toUri();
         return ResponseEntity.created(uri).body(new CursoDataOutput(curso));
     }
