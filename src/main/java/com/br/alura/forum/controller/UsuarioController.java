@@ -6,7 +6,6 @@ import com.br.alura.forum.DTO.usuario.UsuarioDataOutput;
 import com.br.alura.forum.modelo.Usuario;
 import com.br.alura.forum.repository.UsuarioRespository;
 import com.br.alura.forum.service.usuario.UsuarioPermissao;
-import com.br.alura.forum.service.usuario.ValidarUsuario;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
