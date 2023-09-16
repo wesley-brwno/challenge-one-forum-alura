@@ -9,9 +9,6 @@ public record RespostaDataInput(
         String mensagem,
         @NotNull
         @JsonAlias("topico_id")
-        Long topicoId,
-        @NotNull
-        @JsonAlias("autor_id")
-        Long autorId
+        Long topicoId
 ) {
 }

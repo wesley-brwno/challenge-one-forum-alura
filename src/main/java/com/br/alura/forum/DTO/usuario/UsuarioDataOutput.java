@@ -5,10 +5,9 @@ import com.br.alura.forum.modelo.Usuario;
 public record UsuarioDataOutput(
         Long id,
         String nome,
-        String email,
-        String senha
+        String email
 ) {
     public UsuarioDataOutput(Usuario usuario) {
-        this(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.getSenha().replaceAll(".", "*"));
+        this(usuario.getId(), usuario.getNome(), usuario.getEmail());
     }
 }
