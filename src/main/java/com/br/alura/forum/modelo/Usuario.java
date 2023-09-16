@@ -1,6 +1,7 @@
 package com.br.alura.forum.modelo;
 
 import com.br.alura.forum.DTO.usuario.UsuarioDataInput;
+import com.br.alura.forum.constrains.Role;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,11 +21,14 @@ public class Usuario implements UserDetails {
 	private String nome;
 	private String email;
 	private String senha;
+	@Enumerated(EnumType.STRING)
+	private Role role;
 
 	public Usuario(UsuarioDataInput dataInput) {
 		this.nome = dataInput.nome();
 		this.email = dataInput.email();
 		this.senha = dataInput.senha();
+		this.role = Role.USER;
 	}
 
 	public Usuario(Long id, UsuarioDataInput dataInput) {
@@ -40,6 +44,7 @@ public class Usuario implements UserDetails {
 		this.nome = nome;
 		this.email = email;
 		this.senha = encode;
+		this.role = Role.USER;
 	}
 
 
@@ -102,6 +107,9 @@ public class Usuario implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
+		if (this.role == Role.ADMIN) {
+			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+		}
 		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
 	}
 
