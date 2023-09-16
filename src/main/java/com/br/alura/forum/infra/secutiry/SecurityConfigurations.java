@@ -28,7 +28,24 @@ public class SecurityConfigurations {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers(HttpMethod.POST, "/cursos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/cursos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/cursos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/cursos/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/topicos/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/topicos/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/topicos/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/topicos/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/respostas").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/respostas/{id}?solucao").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/respostas/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/respostas/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/respostas/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/usuarios/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/usuarios/{id}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/usuarios/todos").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/usuarios/**").permitAll()
+                        .anyRequest().permitAll())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
