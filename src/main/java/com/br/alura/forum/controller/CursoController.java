@@ -4,6 +4,8 @@ import com.br.alura.forum.DTO.curso.CursoDataInput;
 import com.br.alura.forum.DTO.curso.CursoDataOutput;
 import com.br.alura.forum.modelo.Curso;
 import com.br.alura.forum.repository.CursoRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,8 @@ public class CursoController {
 
     @Autowired
     private CursoRepository cursoRepository;
+
+    @SecurityRequirement(name = "bearer-key")
     @PostMapping
     @Transactional
     public ResponseEntity<CursoDataOutput> cadastrar(@Valid @RequestBody CursoDataInput dataInput, UriComponentsBuilder uriBuilder) {
@@ -46,6 +50,7 @@ public class CursoController {
         return ResponseEntity.ok(cursos);
     }
 
+    @SecurityRequirement(name = "bearer-key")
     @PutMapping("{id}")
     @Transactional
     public ResponseEntity<Void> atualizarCurso(@Valid @RequestBody CursoDataInput dataInput, @PathVariable Long id) {
@@ -57,6 +62,7 @@ public class CursoController {
         return ResponseEntity.notFound().build();
     }
 
+    @SecurityRequirement(name = "bearer-key")
     @DeleteMapping("{id}")
     @Transactional
     public ResponseEntity<Void> deletarCuro(@PathVariable Long id) {

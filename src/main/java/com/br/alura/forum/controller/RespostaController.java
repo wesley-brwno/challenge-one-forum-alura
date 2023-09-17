@@ -13,6 +13,7 @@ import com.br.alura.forum.repository.TopicoRepository;
 import com.br.alura.forum.repository.UsuarioRespository;
 import com.br.alura.forum.service.reposta.ConverteObjectsParaRespostaUsuarioData;
 import com.br.alura.forum.service.usuario.UsuarioPermissao;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
@@ -41,6 +42,7 @@ public class RespostaController {
     @Autowired
     private UsuarioPermissao usuarioPermissao;
 
+    @SecurityRequirement(name = "bearer-key")
     @PostMapping
     @Transactional
     public ResponseEntity<RespostaDataOutput> cadastarResposta(@Valid @RequestBody RespostaDataInput dataInput, UriComponentsBuilder uriBuilder, Authentication authentication) {
@@ -65,6 +67,7 @@ public class RespostaController {
         return ResponseEntity.notFound().build();
     }
 
+    @SecurityRequirement(name = "bearer-key")
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<RespostaDataOutput> atualizarResposta(@PathVariable Long id, @Valid @RequestBody RespostaUpdateData dataInput) {
@@ -78,6 +81,7 @@ public class RespostaController {
         return ResponseEntity.notFound().build();
     }
 
+    @SecurityRequirement(name = "bearer-key")
     @DeleteMapping("/{id}")
     @Transactional
     @Modifying
@@ -93,6 +97,7 @@ public class RespostaController {
         return ResponseEntity.badRequest().build();
     }
 
+    @SecurityRequirement(name = "bearer-key")
     @PostMapping("/{id}")
     @Transactional
     public ResponseEntity<?> isRespostaCorreta(@PathVariable Long id, @RequestParam("solucao") Boolean solucao, Authentication authentication){

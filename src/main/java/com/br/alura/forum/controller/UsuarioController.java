@@ -6,6 +6,7 @@ import com.br.alura.forum.DTO.usuario.UsuarioDataOutput;
 import com.br.alura.forum.modelo.Usuario;
 import com.br.alura.forum.repository.UsuarioRespository;
 import com.br.alura.forum.service.usuario.UsuarioPermissao;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,12 +38,17 @@ public class UsuarioController {
         return ResponseEntity.notFound().build();
     }
 
+    @SecurityRequirement(name = "bearer-key")
     @GetMapping("/todos")
-    public ResponseEntity<Page<UsuarioDataOutput>> listarTodos(@PageableDefault(size = 10) Pageable pageable) {
-        Page<UsuarioDataOutput> usuarios = usuarioRespository.findAllByIdNotNullOrderByNome(pageable).map(UsuarioDataOutput::new);
-        return ResponseEntity.ok().body(usuarios);
+    public ResponseEntity<?> listarTodos(@PageableDefault(size = 10) Pageable pageable, Authentication authentication) {
+        if (usuarioPermissao.isAdmin(authentication)) {
+            Page<UsuarioDataOutput> usuarios = usuarioRespository.findAllByIdNotNullOrderByNome(pageable).map(UsuarioDataOutput::new);
+            return ResponseEntity.ok().body(usuarios);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("Apenas adminitrador pode listar todos os usuários"));
     }
 
+    @SecurityRequirement(name = "bearer-key")
     @PutMapping("{id}")
     @Transactional
     public ResponseEntity<?> atualizarUsuario(@Valid @RequestBody UsuarioDataInput dataInput, @PathVariable Long id, Authentication authentication) {
@@ -58,6 +64,7 @@ public class UsuarioController {
         return ResponseEntity.notFound().build();
     }
 
+    @SecurityRequirement(name = "bearer-key")
     @DeleteMapping("{id}")
     @Transactional
     public ResponseEntity<?> deletarUsuario(@PathVariable Long id, Authentication authentication) {

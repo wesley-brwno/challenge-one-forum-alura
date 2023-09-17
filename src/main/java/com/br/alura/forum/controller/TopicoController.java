@@ -11,6 +11,7 @@ import com.br.alura.forum.repository.TopicoRepository;
 import com.br.alura.forum.repository.UsuarioRespository;
 import com.br.alura.forum.service.topico.ValidarTopico;
 import com.br.alura.forum.service.usuario.UsuarioPermissao;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,6 +45,7 @@ public class TopicoController {
     @Autowired
     private UsuarioRespository usuarioRespository;
 
+    @SecurityRequirement(name = "bearer-key")
     @PostMapping
     @Transactional
     public ResponseEntity<TopicoDetalhes> cadastrar(@Valid @RequestBody CadastrarTopicoDados dados, UriComponentsBuilder uriBuilder) {
@@ -90,6 +92,7 @@ public class TopicoController {
         return ResponseEntity.ok().body(topicos);
     }
 
+    @SecurityRequirement(name = "bearer-key")
     @PutMapping("{id}")
     @Transactional
     public ResponseEntity<?> atualizarTopico(@Valid @RequestBody CadastrarTopicoDados dados, @PathVariable Long id, Authentication authentication) {
@@ -112,6 +115,7 @@ public class TopicoController {
         return ResponseEntity.notFound().build();
     }
 
+    @SecurityRequirement(name = "bearer-key")
     @DeleteMapping("{id}")
     @Transactional
     @Modifying

@@ -43,7 +43,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/respostas/**").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/usuarios/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/usuarios/{id}").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/usuarios/todos").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/usuarios/todos").authenticated()
                         .requestMatchers(HttpMethod.GET, "/usuarios/**").permitAll()
                         .anyRequest().permitAll())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
