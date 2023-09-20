@@ -1,6 +1,6 @@
 package com.br.alura.forum.DTO.topico;
 
-import com.br.alura.forum.modelo.StatusTopico;
+import com.br.alura.forum.constrains.StatusTopico;
 import com.br.alura.forum.modelo.Topico;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
