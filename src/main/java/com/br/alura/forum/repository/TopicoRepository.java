@@ -1,5 +1,6 @@
 package com.br.alura.forum.repository;
 
+import com.br.alura.forum.constrains.StatusTopico;
 import com.br.alura.forum.modelo.Topico;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,4 +17,6 @@ public interface TopicoRepository extends JpaRepository<Topico, Long> {
     long countByTitulo(String titulo);
     long countByMensagem(String mensagem);
     Topico findByTituloAndMensagem(String titulo, String mensagem);
+
+    Page<Topico> findByStatus(StatusTopico status, Pageable pageable);
 }
