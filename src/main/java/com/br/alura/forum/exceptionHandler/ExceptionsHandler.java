@@ -52,6 +52,7 @@ public class ExceptionsHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleExcepion(Exception exception) {
         log.error(exception.getMessage());
+        exception.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Error " + exception.getLocalizedMessage()));
     }
 
