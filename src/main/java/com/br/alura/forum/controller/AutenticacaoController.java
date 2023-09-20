@@ -50,13 +50,16 @@ public class AutenticacaoController {
     }
 
     @PostMapping("/entrar")
-    public ResponseEntity<TokenDTO> logar(@Valid @RequestBody UsuarioLogin data) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
-        Authentication authenticate = authenticationManager.authenticate(token);
-        if (authenticate.isAuthenticated()) {
-            String tokenJWT = tokenService.generateTokenJWT((Usuario) authenticate.getPrincipal());
-            return ResponseEntity.ok().body(new TokenDTO(tokenJWT));
+    public ResponseEntity<?> logar(@Valid @RequestBody UsuarioLogin data) {
+        if (usuarioRespository.findByEmail(data.email()) != null) {
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
+            Authentication authenticate = authenticationManager.authenticate(token);
+            if (authenticate.isAuthenticated()) {
+                String tokenJWT = tokenService.generateTokenJWT((Usuario) authenticate.getPrincipal());
+                return ResponseEntity.ok().body(new TokenDTO(tokenJWT));
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).header("WWW-Authenticate", "Bearer").build();
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).header("WWW-Authenticate", "Bearer").build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("Senha ou email inválidos"));
     }
 }
