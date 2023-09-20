@@ -53,9 +53,10 @@ public class TopicoController {
     @SecurityRequirement(name = "bearer-key")
     @PostMapping
     @Transactional
-    public ResponseEntity<TopicoDetalhes> cadastrar(@Valid @RequestBody CadastrarTopicoDados dados, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<TopicoDetalhes> cadastrar(@Valid @RequestBody CadastrarTopicoDados dados, Authentication authentication, UriComponentsBuilder uriBuilder) {
         validarTopico.aplicarValidacoes(dados);
-        Usuario usuario = usuarioRespository.findById(dados.autorId()).get();
+
+        Usuario usuario = (Usuario) usuarioRespository.findByEmail(authentication.getName());
         Curso curso = cursoRepository.findById(dados.cursoId()).get();
         Topico topico = new Topico(dados, usuario, curso);
         topicoRepository.save(topico);
@@ -106,7 +107,7 @@ public class TopicoController {
         if (topico.isPresent()) {
             if (usuarioPermissao.isCriadorDoTopico(authentication, topico.get().getAutor().getEmail())) {
                 validarTopico.aplicarValidacoes(dados);
-                Usuario usuario = usuarioRespository.findById(dados.autorId()).get();
+                Usuario usuario = (Usuario) usuarioRespository.findByEmail(authentication.getName());
                 Curso curso = cursoRepository.findById(dados.cursoId()).get();
                 topico.get().setTitulo(dados.titulo());
                 topico.get().setMensagem(dados.mensagem());
