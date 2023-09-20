@@ -1,6 +1,7 @@
 package com.br.alura.forum.modelo;
 
 import com.br.alura.forum.DTO.topico.CadastrarTopicoDados;
+import com.br.alura.forum.constrains.StatusTopico;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,7 @@ public class Topico {
 	private String titulo;
 	private String mensagem;
 	private LocalDateTime dataCriacao = LocalDateTime.now();
+	@Enumerated(EnumType.STRING)
 	private StatusTopico status = StatusTopico.NAO_RESPONDIDO;
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
