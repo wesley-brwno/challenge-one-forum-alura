@@ -5,6 +5,7 @@ import com.br.alura.forum.DTO.resposta.RespostaDataInput;
 import com.br.alura.forum.DTO.resposta.RespostaDataOutput;
 import com.br.alura.forum.DTO.resposta.RespostaUpdateData;
 import com.br.alura.forum.DTO.resposta.RespostaUsuarioData;
+import com.br.alura.forum.constrains.StatusTopico;
 import com.br.alura.forum.modelo.Resposta;
 import com.br.alura.forum.modelo.Topico;
 import com.br.alura.forum.modelo.Usuario;
@@ -54,7 +55,9 @@ public class RespostaController {
             Topico topico = topicoRepository.findById(dataInput.topicoId()).get();
             Resposta resposta = new Resposta(dataInput, usuario, topico);
 
-            topicoStatusService.topicoNaoSolucionado(dataInput.topicoId());
+            if (topico.getStatus().equals(StatusTopico.NAO_RESPONDIDO)) {
+                topicoStatusService.topicoNaoSolucionado(dataInput.topicoId());
+            }
 
             respostaRepository.save(resposta);
             URI uri = uriBuilder.path("/respostas/{id}").buildAndExpand(resposta.getId()).toUri();
