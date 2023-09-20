@@ -10,9 +10,6 @@ public record CadastrarTopicoDados(
         @NotBlank
         String mensagem,
         @NotNull
-        @JsonAlias("autor_id")
-        Long autorId,
-        @NotNull
         @JsonAlias("curso_id")
         Long cursoId
 ) {
