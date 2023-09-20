@@ -12,7 +12,7 @@ public record TopicoDetalhes(
         String messagem,
         @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
         LocalDateTime data,
-        StatusTopico statuts,
+        StatusTopico status,
         String autor,
         String curso
 ) {
