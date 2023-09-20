@@ -12,6 +12,7 @@ import com.br.alura.forum.repository.RespostaRepository;
 import com.br.alura.forum.repository.TopicoRepository;
 import com.br.alura.forum.repository.UsuarioRespository;
 import com.br.alura.forum.service.reposta.ConverteObjectsParaRespostaUsuarioData;
+import com.br.alura.forum.service.topico.TopicoStatusService;
 import com.br.alura.forum.service.usuario.UsuarioPermissao;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -41,6 +42,8 @@ public class RespostaController {
     private ConverteObjectsParaRespostaUsuarioData converteObjcts;
     @Autowired
     private UsuarioPermissao usuarioPermissao;
+    @Autowired
+    private TopicoStatusService topicoStatusService;
 
     @SecurityRequirement(name = "bearer-key")
     @PostMapping
@@ -50,6 +53,9 @@ public class RespostaController {
             Usuario usuario = (Usuario) usuarioRespository.findByEmail(authentication.getName());
             Topico topico = topicoRepository.findById(dataInput.topicoId()).get();
             Resposta resposta = new Resposta(dataInput, usuario, topico);
+
+            topicoStatusService.topicoNaoSolucionado(dataInput.topicoId());
+
             respostaRepository.save(resposta);
             URI uri = uriBuilder.path("/respostas/{id}").buildAndExpand(resposta.getId()).toUri();
             return ResponseEntity.created(uri).body(new RespostaDataOutput(resposta));
@@ -106,6 +112,9 @@ public class RespostaController {
             if (usuarioPermissao.isCriadorDoTopico(authentication,respotaOptional.get().getAutor().getEmail())) {
                 respotaOptional.get().setSolucao(solucao);
                 respostaRepository.save(respotaOptional.get());
+
+                topicoStatusService.topicoSolucionado(respotaOptional.get().getTopico().getId());
+
                 return ResponseEntity.ok().build();
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("Apenas o cirador do tópico pode alterar status da resposta!"));
