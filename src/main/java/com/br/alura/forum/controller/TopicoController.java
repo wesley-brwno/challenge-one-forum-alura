@@ -2,13 +2,16 @@ package com.br.alura.forum.controller;
 
 import com.br.alura.forum.DTO.autenticacao.ErrorResponse;
 import com.br.alura.forum.DTO.topico.CadastrarTopicoDados;
+import com.br.alura.forum.DTO.topico.TopicoComRespostas;
 import com.br.alura.forum.DTO.topico.TopicoDetalhes;
+import com.br.alura.forum.constrains.StatusTopico;
 import com.br.alura.forum.modelo.Curso;
 import com.br.alura.forum.modelo.Topico;
 import com.br.alura.forum.modelo.Usuario;
 import com.br.alura.forum.repository.CursoRepository;
 import com.br.alura.forum.repository.TopicoRepository;
 import com.br.alura.forum.repository.UsuarioRespository;
+import com.br.alura.forum.service.topico.PopularTopicoComRespostas;
 import com.br.alura.forum.service.topico.ValidarTopico;
 import com.br.alura.forum.service.usuario.UsuarioPermissao;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -44,6 +47,8 @@ public class TopicoController {
     private CursoRepository cursoRepository;
     @Autowired
     private UsuarioRespository usuarioRespository;
+    @Autowired
+    private PopularTopicoComRespostas popularTopicoComRespostas;
 
     @SecurityRequirement(name = "bearer-key")
     @PostMapping
@@ -127,6 +132,38 @@ public class TopicoController {
                 return ResponseEntity.noContent().build();
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("Usuário não é o criador desse tópico!"));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @SecurityRequirement(name = "bearer-key")
+    @PutMapping("/{topico-fechado}/{id}")
+    @Transactional
+    public ResponseEntity<?> atualizarTopicoStatusFechado(@RequestParam("topico-fechado") Boolean fechado, @RequestParam("id") Long id, Authentication authentication) {
+        Optional<Topico> topico = topicoRepository.findById(id);
+        if (topico.isPresent()) {
+            if (usuarioPermissao.isAdmin(authentication) || usuarioPermissao.isCriadorDoTopico(authentication, topico.get().getAutor().getEmail())) {
+                topico.get().setStatus(StatusTopico.FECHADO);
+                topicoRepository.save(topico.get());
+                return ResponseEntity.ok().body(new TopicoDetalhes(topico.get()));
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("Você não tem permissão para mudar o status deste tópico para fechado. Apenas quem criou o tópico ou um administrador pode fazer isso. Se você precisar fechar este tópico, entre em contato com o administrador."));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<Page<TopicoDetalhes>> listarPorStatus (@RequestParam StatusTopico status, Pageable pageable) {
+        System.err.println(status);
+        Page<TopicoDetalhes> topicos = topicoRepository.findByStatus(status, pageable).map(TopicoDetalhes::new);
+        return ResponseEntity.ok().body(topicos);
+    }
+
+    @GetMapping("/{topico_id}/respostas")
+    public ResponseEntity<TopicoComRespostas> listarTopicoComRespostas(@PathVariable("topico_id") Long id) {
+        Optional<Topico> topico = topicoRepository.findById(id);
+        if(topico.isPresent()) {
+            return ResponseEntity.ok().body(popularTopicoComRespostas.obterDados(topico.get()));
         }
         return ResponseEntity.notFound().build();
     }
