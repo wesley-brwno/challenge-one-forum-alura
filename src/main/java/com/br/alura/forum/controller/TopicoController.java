@@ -138,9 +138,9 @@ public class TopicoController {
     }
 
     @SecurityRequirement(name = "bearer-key")
-    @PutMapping("/{topico-fechado}/{id}")
+    @PutMapping("/{ativo}/{id}")
     @Transactional
-    public ResponseEntity<?> atualizarTopicoStatusFechado(@RequestParam("topico-fechado") Boolean fechado, @RequestParam("id") Long id, Authentication authentication) {
+    public ResponseEntity<?> atualizarTopicoStatusFechado(@RequestParam("ativo") Boolean fechado, @RequestParam("id") Long id, Authentication authentication) {
         Optional<Topico> topico = topicoRepository.findById(id);
         if (topico.isPresent()) {
             if (usuarioPermissao.isAdmin(authentication) || usuarioPermissao.isCriadorDoTopico(authentication, topico.get().getAutor().getEmail())) {
