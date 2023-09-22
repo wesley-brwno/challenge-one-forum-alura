@@ -1,132 +1,230 @@
-# Challenge ONE | Back End | Alura Forum 
+# Challenge ONE | Back End | Alura Forum
 
 <p align="center" >
      <img width="200" heigth="200" src="https://user-images.githubusercontent.com/78982435/209698701-28dedb2e-855b-44b2-8872-afa45e3b35aa.png">
 </p>
 
-## Nossas boas-vindas ao projeto base Fórum Alura com Java e Spring! 
 
-### Passos fundamentais:
+## Sobre o projeto
+O fórum da Alura é uma API REST de discussão online onde usuáros podem compartilhar dúvidas, respostas e experiências.
+## Tecnologias
+- [Spring Boot](https://spring.io/projects/spring-boot)
+- [Spring MVC](https://docs.spring.io/spring-framework/reference/web/webmvc.html)
+- [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
+- [Spring Security](https://spring.io/projects/spring-security)
+- [JWT](https://jwt.io/)
+- [SpringDoc OpenAPI 3](https://springdoc.org/)
+- [Mysql](https://dev.mysql.com/downloads/)
 
-#### ⭐ Marque este projeto com uma estrela 
+## Práticas Adotadas
+- API REST
+- Validação de dados com anotações do Spring validations e Hibernate
+- Consultas com Spring Data JPA
+- Tratamento de respostas de erro
+- Proteção de endpoints e recursos
+- Autenticação e autorização
+- Gestão de usuários e permições
+- Geração automática do Swagger com a OpenAPI 3
+## Como Executar
+- Para executar o projeto, você precisará do Java a partir da versão 17.
+- Baixe o executável aqui: link para o executável.
+- Para executar o projeto, abra um terminal e navegue até a pasta onde o executável foi baixado. Em seguida, execute o seguinte comando:
 
-#### 📚 Siga as instruções das aulas e conteúdos 
+```
+ java -jar forum-0.0.1-SNAPSHOT.jar 
+```
+Se o banco de dados não estiver disponível, você pode fornecer um para o projeto, as tabelas e dados serão gerados automaticamente. Para isso, configure as seguintes variáveis de ambiente:
 
-#### 📃<u>*Visite a página do Challenge [Clicando aqui!](https://www.alura.com.br/challenges/oracle-one-back-end/aluraforum)*</u> 
+- MYSQL_HOST (URL do banco de dados, incluindo o nome)
+- MYSQL_USERNAME (Nome do usuário do banco de dados)
+- MYSQL_PASSWORD (Senha do banco de dados)
 
+Em seguida, execute o seguinte comando em um terminal:
+```
+java -DMYSQL_HOST=URL_PARA_O_BANCO -DMYSQL_USERNAME=NOME_DO_USUARIO -DMYSQL_PASSWORD=SENHA -jar forum-0.0.1-SNAPSHOT.jar 
+```
 
+## Instruções para acessar a API
+- A API pode ser acessada em [localhost:8080](http://localhost:8080).
+- O Swagger pode ser visualizado em [localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html).
 
-### Tecnologias utilizadas:
+## Instruções para fazer login
 
-- [Eclipse](https://www.eclipse.org/)
-- [MySql](https://www.mysql.com/)
-- [Java](https://www.java.com/pt-BR/)
-- [Spring Security](https://start.spring.io/)
-- [Token JWT](https://jwt.io/)
+- Para fazer login como administrador, use as seguintes credenciais:
+```
+{
+  "email": "admin@email.com",
+  "senha": "admin1234"
+}
+```
+- Para fazer login como um usuário, use as seguintes credenciais:
+```
+{
+  "email": "user@email.com",
+  "senha": "user1234"
+}
+``` 
+## Diagrama Entidade Relacionamento
+![forum_alura_DER](https://github.com/wesley-brwno/challenge-one-forum-alura/assets/84514966/e3c0e9ee-1439-4c12-a537-5cb99c92bdf2)
 
+## Endpoints da API
+<table border="1">
+    <tr>
+        <th>método</th>
+        <th>URI</th>
+        <th>descrição</th>
+        <th>perfil</th>
+    </tr>
+    <tr>
+        <td>POST</td>
+        <td>/auth/entrar</td>
+        <td>permite que usuário efetue log in</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td>POST</td>
+        <td>/auth/cadastar</td>
+        <td>permite que usuário efetue cadastro na applicação</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td>/cursos</td>
+        <td>lista todos os cursos</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td>POST</td>
+        <td>/cursos</td>
+        <td>cadastra um novo curso</td>
+        <td>ADMIN</td>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td>/cursos/{id}</td>
+        <td>lista um curso por id</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td>DELETE</td>
+        <td>/cursos/{id}</td>
+        <td>deleta um curso por id</td>
+        <td>ADMIN</td>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td>/respostas</td>
+        <td>lista todas as respostas pelo id de um tópico</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td>POST</td>
+        <td>/respostas</td>
+        <td>cria uma resposta para um post</td></td>
+        <td>ADMIN | USER</td>
+    </tr>
+    <tr>
+        <td>PUT</td>
+        <td>/respostas</td>
+        <td>atualiza uma resposta</td>
+        <td>ADMIN | USER</td>
+    </tr>
+    <tr>
+        <td>POST</td>
+        <td>/respostas/{id}</td>
+        <td>marca uma resposta como correta ou incorreta usando seu id</td>
+        <td>USER</td>
+    </tr>
+    <tr>
+        <td>DELETE</td>
+        <td>/respostas/{id}</td>
+        <td>deleta uma resposta por id</td>
+        <td>ADMIN | USER</td>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td>/topicos</td>
+        <td>lista todos os tópicos</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td>POST</td>
+        <td>/topicos</td>
+        <td>cadastra um tópico</td>
+        <td>ADMIN | USER</td>
+    </tr>
+    <tr>
+        <td>PUT</td>
+        <td>/topicos/{ativo}/{id}</td>
+        <td>muda o status de um tópico para FECHADO pelo id</td>
+        <td>ADMIN | USER</td>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td>/topicos/{id}</td>
+        <td>busca um tópico pelo id</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td>PUT</td>
+        <td>/topicos/{id}</td>
+        <td>atualiza um tópico pelo id</td>
+        <td>USER</td>
+    </tr>
+    <tr>
+        <td>DELETE</td>
+        <td>/topicos/{id}</td>
+        <td>deleta um tópico pelo id</td>
+        <td>ADMIN | USER</td>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td>/topicos/{topico_id}/respostas</td>
+        <td>lista tópico pelo id com suas respostas</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td>/topicos/ano/{ano}</td>
+        <td>lista tópicos por ano</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td>/topicos/cursos/{nome}</td>
+        <td>lista tópicos pelo nome do curso</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td>/topicos/status</td>
+        <td>lista tópicos por status</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td>/usuarios/{id}</td>
+        <td>lista usuário pelo id</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td>PUT</td>
+        <td>/usuarios/{id}</td>
+        <td>atualiza usuário pelo id</td>
+        <td>ADMIN | USER</td>
+    </tr>
+    <tr>
+        <td>DELETE</td>
+        <td>/usuarios/{id}</td>
+        <td>deleta usuário pelo id</td>
+        <td>ADMIN | USER</td>
+    </tr>
+    <tr>
+        <td>GET</td>
+        <td>/usuarios</td>
+        <td>lista todos os usuários</td>
+        <td>ADMIN</td>
+    </tr>
+</table>
 
-
-## ⬇️ Download
-
-### Como fazer o download:
-
-#### 🔹 Fork
-
-1. Faça o **fork** do projeto. No lado superior direito, ao clicar no ícone ele criará um repositório do projeto em sua conta pessoal do GitHub.
-
-   <p align="center" >
-     <img width="600" heigth="600" src="https://user-images.githubusercontent.com/101413385/169404781-7df6355b-3a15-472a-8d8e-fdb84d91a7bd.png">
-</p>
-
-2. Após ter o repositório "forkado" para sua conta, verifica se a url da página é a do repositório da sua conta.
-
-  <p align="center" >
-     <img width="600" heigth="600" src="https://user-images.githubusercontent.com/78982435/209683304-04e0d114-8834-4449-b82b-29a38f057f2d.png">
-</p>
-
-3. Clique na opção **Code**. Ele apresentará três formas para instalar o repositório em sua máquina, e destacamos duas:
-
-    <p align="center" >
-     <img width="600" heigth="600" src="https://user-images.githubusercontent.com/78982435/209683480-72fab313-ecbc-4de7-8f75-2d6b5013ea49.png">
-     </p></br>
-
-
-   #### 🔹 Clonar ou baixar o ZIP
-
-   1. Para clonar, basta copiar a *url* destacada na imagem e localizada logo abaixo do HTTPS, criar uma pasta em seu computador, abrir o *cmd* ou o *git bash* dentro dessa pasta e em seguida insira o comando **git clone** e com o botão direito do mouse dentro do terminal clicar na opção **Paste** para colar a *url* e dar *Enter*.
-
-     <p align="center" >
-     <img width="600" heigth="600" src="https://user-images.githubusercontent.com/78982435/209683774-85c78b5e-605f-4643-818f-0bb2eddca175.png">
-</p>
-
-   2. A segunda opção é baixar o código em um pacote **"zipado"** e extrair a pasta para o seu computador.
-
-## 📝 Eclipse
-
-### Como importar o meu projeto no Eclipse?
-
-1. Uma vez dentro do Editor do lado esquerdo, clique em *File* que está no menu na parte superior, escolha a opção *Open Projects from File System*.
-
-   <p align="center" >
-     <img width="400" heigth="400" src="https://user-images.githubusercontent.com/101413385/173164237-1db32d79-2b35-433f-817c-ec3fa30899fc.png">
-</p>
-
-   Em seguida, clique em *Directory* e localize o diretório do projeto "clonado" ou "extraído" em seu computador. Clique em *Finish* para concluir a importação.
-
-   <p align="center" >
-     <img width="600" heigth="600" src="https://user-images.githubusercontent.com/78982435/209683881-aa94b361-d63e-4d78-b5db-d5215b350efa.png">
-</p>
-
-2. A segunda forma de importar está em *File* na opção *Import*. Ou através do **Project Explorer**, clique no campo vazio com o botão direito do mouse e escolha a opção *Import*.
-
-   <p align="center" >
-     <img width="400" heigth="400" src="https://user-images.githubusercontent.com/101413385/173111357-2ec928ac-5a3d-4f7c-ba84-8906d84bfd08.png">
-</p>
-
-<p align="center" >
-     <img width="400" heigth="400" src="https://user-images.githubusercontent.com/101413385/169431325-23a2e3cb-85a3-4298-8e60-64dfa58e2e6f.png">
-</p>
-
-   Se optar pelo **Import**, abrirá a janela correspondente, clique na opção *Existing Projects Into Workspace* e no botão *Next*.
-
-   <p align="center" >
-     <img width="600" heigth="600" src="https://user-images.githubusercontent.com/101413385/169431890-27f40955-27d8-4b4d-82df-d3507f85de6c.png">
-</p>
-
-Em seguida, clique no botão <em>Browse</em> e busque o projeto no diretório local.
-
-<p align="center" >
-     <img width="600" heigth="600" src="https://user-images.githubusercontent.com/78982435/209683946-24a7a3c1-8170-4280-8047-5eb70cba7a9b.png">
-</p>
-   
-
-## 🚧Como listar o meu projeto neste Challenge?
-
-1. Publique seu projeto no GitHub;
-2. Utilize o tópico:
-   - Turma 5: **challengeforumalura5**;
-   - Vá na aba "`Sobre`" ou "`About`" do seu projeto, no menu lateral que fica na esquerda, dentro do repositório no GitHub e Adicione a tag "**challengeforumalura5**".
-
-![11 gif - github](https://user-images.githubusercontent.com/78982435/209682261-a06b735c-0752-48ad-bbd3-5784e4f6d7ef.gif)
-
-## 📬Como realizar a entrega final do meu projeto?
-
-1. Preencha o formulário de entrega com o **link do projeto publicado com GitHub Pages** 
-
-   🔹 [Link para o formulário](https://lp.alura.com.br/alura-latam-entrega-challenge-one-portugues-back-end)
-
-   <p align="center" >
-     <img width="700" heigth="700" src="https://user-images.githubusercontent.com/91544872/218554361-c5fa616a-3232-4a21-998c-3b03fb7a0c8c.png">
-</p>
-
-2. Acesse seu e-mail e terá a sua Badge Exclusiva do Desafio 🏆
-
-3. Não se esqueça de publicar um link ou vídeo do seu projeto no [Linkedin](https://www.linkedin.com/company/alura-latam/mycompany/)! 🏁
-
-💙 Alura Latam
-
-[![img](https://camo.githubusercontent.com/c00f87aeebbec37f3ee0857cc4c20b21fefde8a96caf4744383ebfe44a47fe3f/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d4c696e6b6564496e2d2532333030373742353f7374796c653d666f722d7468652d6261646765266c6f676f3d6c696e6b6564696e266c6f676f436f6c6f723d7768697465)](https://www.linkedin.com/company/alura-latam/mycompany/)
-
-🧡 Oracle
-
-[![img](https://camo.githubusercontent.com/c00f87aeebbec37f3ee0857cc4c20b21fefde8a96caf4744383ebfe44a47fe3f/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d4c696e6b6564496e2d2532333030373742353f7374796c653d666f722d7468652d6261646765266c6f676f3d6c696e6b6564696e266c6f676f436f6c6f723d7768697465)](https://www.linkedin.com/company/oracle/)
+![Inserirjh um título](https://user-images.githubusercontent.com/101230741/188219675-46a897f5-7a17-4593-b026-088bc6afd7b9.png)
