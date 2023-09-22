@@ -1,4 +1,4 @@
-INSERT INTO cursos (categoria, nome)
+INSERT INTO cursos (nome, categoria)
 VALUES ("Mandarim", "Idiomas"),
        ("ORACLE NEXT EDUCATION (ONE)", "Tecnologia"),
        ("Engenharia de Software", "Tecnologia"),
@@ -17,9 +17,10 @@ INSERT INTO usuarios (email, nome, role, senha)
 VALUES ('admin@email.com', 'Administrador do Sistema', 'ADMIN',
         '$2a$10$ghZIWprsXWFr6JRnTAeAJe5p0BWldn33iz0IkAgr2KT6U8IoYc.Dm'),
        ('user@email.com', 'Usuário do Sistema', 'USER', '$2a$10$aSfg5opE6j2LOlaLNMwLW.u4rUjX4UqBKs5tarFuc6vcNK9J9LYbO'),
-       ('usuario1@example.com', 'Usuário 1', 'USER', 'senha1'),
-       ('usuario2@example.com', 'Usuário 2', 'USER', 'senha2'),
-       ('usuario3@example.com', 'Usuário 3', 'ADMIN', 'senha3');
+       ('usuario1@example.com', 'Komi Shouko', 'USER', 'senha1'),
+       ('usuario2@example.com', 'Viktor', 'USER', 'senha2'),
+       ('usuario3@example.com', 'Viola', 'USER', 'senha2'),
+       ('usuario4@example.com', 'Alice Lendrott', 'ADMIN', 'senha3');
 
 INSERT INTO topicos (data_criacao, mensagem, status, titulo, usuario_id, curso_id)
 VALUES ('2022-05-20 09:11:55',
@@ -42,7 +43,16 @@ VALUES ('2022-05-20 09:11:55',
 
 
 INSERT INTO respostas (data_criacao, mensagem, solucao, usuario_id, topico_id)
-VALUES ('2023-09-20 19:53:00',
+VALUES('2023-09-22 10:29:00',
+       'Uma empresa pode contratar profissionais capacitados e qualificados, mesmo que eles não tenham acesso à educação tradicional.',
+       0, 2, 2),('2023-09-21 10:29:00',
+       'Educação de qualidade com acesso a cursos e treinamentos gratuitos em tecnologias Oracle.',
+       0, 3, 2),('2023-09-22 10:29:00',
+       'Carreira do futuro: Formação em tecnologias de alta demanda no mercado de trabalho.',
+       0, 4, 2),('2023-09-21 19:29:00',
+       'Acesso a recursos de desenvolvimento profissional, como certificações Oracle.',
+       0, 5, 2),
+    ('2023-09-20 19:53:00',
         'A atualização do curso de Engenharia de Software inclui novos conteúdos sobre design de software e arquitetura de software. Os novos conteúdos serão lançados no dia 30 de setembro.',
         0, 2, 7),
        ('2023-09-20 19:46:00',
