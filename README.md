@@ -25,9 +25,10 @@ O fórum da Alura é uma API REST de discussão online onde usuáros podem compa
 - Autenticação e autorização
 - Gestão de usuários e permições
 - Geração automática do Swagger com a OpenAPI 3
+
 ## Como Executar
 - Para executar o projeto, você precisará do Java a partir da versão 17.
-- Baixe o executável aqui: link para o executável.
+- Baixe o executável aqui: <a href="https://github.com/wesley-brwno/challenge-one-forum-alura/releases/download/v1.0.1/forum-0.0.1-SNAPSHOT.jar">API_forum_alura</a>.
 - Para executar o projeto, abra um terminal e navegue até a pasta onde o executável foi baixado. Em seguida, execute o seguinte comando:
 
 ```
@@ -228,3 +229,9 @@ java -DMYSQL_HOST=URL_PARA_O_BANCO -DMYSQL_USERNAME=NOME_DO_USUARIO -DMYSQL_PASS
 </table>
 
 ![Inserirjh um título](https://user-images.githubusercontent.com/101230741/188219675-46a897f5-7a17-4593-b026-088bc6afd7b9.png)
+
+## <h2 align="center">Badge do desafio</h2>
+
+<p align="center" >
+     <img width="400" heigth=auto src="https://github.com/wesley-brwno/challenge-one-forum-alura/assets/84514966/e36128c4-4936-4a48-8490-f765a415cab7">
+</p>
